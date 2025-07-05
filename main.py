@@ -6,6 +6,8 @@ from typing import Optional
 import random
 import re
 import numpy as np
+import os
+from keep_alive import keep_alive
 
 intents = discord.Intents.all()
 client = discord.Client(intents=intents) 
@@ -354,4 +356,7 @@ async def on_button_click(interaction: discord.Interaction):
   await interaction.reply(response, mention_author=True)
 
 
+TOKEN = os.getenv("DISCORD_TOKEN")
+# Web サーバの立ち上げ
+keep_alive()
 client.run(TOKEN)
