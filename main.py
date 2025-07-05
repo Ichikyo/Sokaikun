@@ -267,7 +267,7 @@ async def rolepanel(interaction: Interaction,ロール1: discord.Role,ロール2
     file_path = f'{directory_path}{role_panel_message_id}.json'
     with open(file_path, 'w', encoding='utf-8') as json_file:
         json.dump(role_data, json_file, ensure_ascii=False, indent=4)
-        print(f"ロールパネルのメッセージID: {role_panel_message_id}")
+    print(f"ロールパネルのメッセージID: {role_panel_message_id}")
 
 @client.event
 async def on_interaction(inter:discord.Interaction):
@@ -317,7 +317,7 @@ async def on_button_click(interaction: discord.Interaction):
       file_path = f'data/{interaction.guild.id}/{interaction.channel.id}/rolepanel/{interaction.message.id}.json'
       try:
           with open(file_path, 'r', encoding='utf-8') as json_file:
-          role_data = json.load(json_file)
+              role_data = json.load(json_file)
       except FileNotFoundError:
           print(f"File not found: {file_path}")
           await interaction.response.send_message("対応するファイルが見つかりませんでした。", ephemeral=True)
