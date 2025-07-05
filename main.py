@@ -215,42 +215,6 @@ async def sokai_all(interaction: Interaction):
   await interaction.response.send_message(sokai_all_message.replace("(+0)", ""))
 
 
-@client.event
-async def on_interaction(inter:discord.Interaction):
-    try:
-        if inter.data["component_type"] == 2:
-            await on_button_click(inter)
-    except KeyError:
-        pass
-
-async def on_button_click(interaction: discord.Interaction):
-  custom_id = interaction.data["custom_id"]
-  if custom_id == "del_id":
-    try:
-        del_message = await interaction.channel.fetch_message(interaction.message.id)
-        del_role = discord.utils.get(del_message.guild.roles, name = "委任宣言者")
-    except discord.HTTPException as e:
-        print(f"Error fetching message: {e}")
-        await interaction.response.send_message("エラー: メッセージを取得できませんでした。", ephemeral=True)
-        return
-  member = interaction.guild.get_member(interaction.user.id)
-  if discord.utils.get(member.roles, id=int(del_role.id)):
-      try:
-          await member.remove_roles(discord.Object(int(del_role.id)))
-          await interaction.response.send_message(f"ロールを削除しました: {del_role.name}", ephemeral=True)
-      except discord.Forbidden:
-          await interaction.response.send_message("エラー: ロールを削除できません。権限が不足している可能性があります。", ephemeral=True)
-  else:
-      if del_role:
-          try:
-              await member.add_roles(del_role)
-              await interaction.response.send_message(f"ロールを付与しました: {del_role.name}", ephemeral=True)
-          except discord.Forbidden:
-              await interaction.response.send_message("エラー: ロールを付与できません。権限が不足している可能性があります。", ephemeral=True)
-      else:
-          await interaction.response.send_message("エラー: ロール[委任宣言者]を見つけられませんでした。", ephemeral=True)
-
-
 # ロールパネル
 role_panel_message = None
 @tree.command(name='rolepanel', description='ロールパネルを作成します')
@@ -313,45 +277,71 @@ async def on_interaction(inter:discord.Interaction):
     except KeyError:
         pass
 
+
+
 async def on_button_click(interaction: discord.Interaction):
   custom_id = interaction.data["custom_id"]
-  if custom_id.startswith("rolepanel"):
-    role_number = int(custom_id.replace("rolepanel", ""))
-    try:
-        role_panel_message = await interaction.channel.fetch_message(interaction.message.id)
-    except discord.HTTPException as e:
-        print(f"Error fetching message: {e}")
-        await interaction.response.send_message("エラー: メッセージを取得できませんでした。", ephemeral=True)
-        return
-    file_path = f'data/{interaction.guild.id}/{interaction.channel.id}/rolepanel/{interaction.message.id}.json'
-    try:
-        with open(file_path, 'r', encoding='utf-8') as json_file:
-            role_data = json.load(json_file)
-    except FileNotFoundError:
-        print(f"File not found: {file_path}")
-        await interaction.response.send_message("対応するファイルが見つかりませんでした。", ephemeral=True)
-        return
-    selected_role = next((role for role in role_data if role.get("rolenumber") == role_number), None)
-    if selected_role:
-        member = interaction.guild.get_member(interaction.user.id)
-        if discord.utils.get(member.roles, id=int(selected_role["roleid"])):
-            try:
-                await member.remove_roles(discord.Object(int(selected_role["roleid"])))
-                await interaction.response.send_message(f"ロールを削除しました: {selected_role['rolename']}", ephemeral=True)
-            except discord.Forbidden:
-                await interaction.response.send_message("エラー: ロールを削除できません。権限が不足している可能性があります。", ephemeral=True)
-        else:
-            role = interaction.guild.get_role(int(selected_role["roleid"]))
-            if role:
-                try:
-                    await member.add_roles(role)
-                    await interaction.response.send_message(f"ロールを付与しました: {selected_role['rolename']}", ephemeral=True)
-                except discord.Forbidden:
-                    await interaction.response.send_message("エラー: ロールを付与できません。権限が不足している可能性があります。", ephemeral=True)
-            else:
-                await interaction.response.send_message("エラー: ロールを見つけられませんでした。", ephemeral=True)
-    else:
-        await interaction.response.send_message(f"エラー: ロール番号 {role_number} が見つかりませんでした。", ephemeral=True)
+  member = interaction.guild.get_member(interaction.user.id)
+  if custom_id == "del_id":
+      try:
+          del_message = await interaction.channel.fetch_message(interaction.message.id)
+          del_role = discord.utils.get(del_message.guild.roles, name = "委任宣言者")
+      except discord.HTTPException as e:
+          print(f"Error fetching message: {e}")
+          await interaction.response.send_message("エラー: メッセージを取得できませんでした。", ephemeral=True)
+          return
+      if discord.utils.get(member.roles, id=int(del_role.id)):
+          try:
+              await member.remove_roles(discord.Object(int(del_role.id)))
+              await interaction.response.send_message(f"ロールを削除しました: {del_role.name}", ephemeral=True)
+          except discord.Forbidden:
+              await interaction.response.send_message("エラー: ロールを削除できません。権限が不足している可能性があります。", ephemeral=True)
+      else:
+          if del_role:
+              try:
+                  await member.add_roles(del_role)
+                  await interaction.response.send_message(f"ロールを付与しました: {del_role.name}", ephemeral=True)
+              except discord.Forbidden:
+                  await interaction.response.send_message("エラー: ロールを付与できません。権限が不足している可能性があります。", ephemeral=True)
+          else:
+              await interaction.response.send_message("エラー: ロール[委任宣言者]を見つけられませんでした。", ephemeral=True)
+        
+  elif custom_id.startswith("rolepanel"):
+      role_number = int(custom_id.replace("rolepanel", ""))
+      try:
+          role_panel_message = await interaction.channel.fetch_message(interaction.message.id)
+      except discord.HTTPException as e:
+          print(f"Error fetching message: {e}")
+          await interaction.response.send_message("エラー: メッセージを取得できませんでした。", ephemeral=True)
+          return
+      file_path = f'data/{interaction.guild.id}/{interaction.channel.id}/rolepanel/{interaction.message.id}.json'
+      try:
+          with open(file_path, 'r', encoding='utf-8') as json_file:
+          role_data = json.load(json_file)
+      except FileNotFoundError:
+          print(f"File not found: {file_path}")
+          await interaction.response.send_message("対応するファイルが見つかりませんでした。", ephemeral=True)
+          return
+      selected_role = next((role for role in role_data if role.get("rolenumber") == role_number), None)
+      if selected_role:
+          if discord.utils.get(member.roles, id=int(selected_role["roleid"])):
+              try:
+                  await member.remove_roles(discord.Object(int(selected_role["roleid"])))
+                  await interaction.response.send_message(f"ロールを削除しました: {selected_role['rolename']}", ephemeral=True)
+              except discord.Forbidden:
+                  await interaction.response.send_message("エラー: ロールを削除できません。権限が不足している可能性があります。", ephemeral=True)
+          else:
+              role = interaction.guild.get_role(int(selected_role["roleid"]))
+              if role:
+                  try:
+                      await member.add_roles(role)
+                      await interaction.response.send_message(f"ロールを付与しました: {selected_role['rolename']}", ephemeral=True)
+                  except discord.Forbidden:
+                      await interaction.response.send_message("エラー: ロールを付与できません。権限が不足している可能性があります。", ephemeral=True)
+              else:
+                  await interaction.response.send_message("エラー: ロールを見つけられませんでした。", ephemeral=True)
+      else:
+          await interaction.response.send_message(f"エラー: ロール番号 {role_number} が見つかりませんでした。", ephemeral=True)
 
 
 TOKEN = os.getenv("DISCORD_TOKEN")
