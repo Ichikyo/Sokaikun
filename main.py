@@ -7,8 +7,6 @@ import random
 import re
 import numpy as np
 
-TOKEN = "MTM4NzM5ODY4NjE2NTk2Mjc5Mg.GbXZs3.jVcj2mhdqY89lGh9axmIvL2GS-vXC5LBQWAKDs"
-
 intents = discord.Intents.all()
 client = discord.Client(intents=intents) 
 tree = app_commands.CommandTree(client)
