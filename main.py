@@ -353,8 +353,6 @@ async def on_button_click(interaction: discord.Interaction):
     else:
         await interaction.response.send_message(f"エラー: ロール番号 {role_number} が見つかりませんでした。", ephemeral=True)
 
-  await interaction.reply(response, mention_author=True)
-
 
 TOKEN = os.getenv("DISCORD_TOKEN")
 # Web サーバの立ち上げ
