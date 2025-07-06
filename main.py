@@ -26,10 +26,10 @@ async def on_ready():
         print("コマンドが正常に同期されました。")
     except Exception as e:
         print(f"コマンドの同期中にエラーが発生しました: {e}")
-    activity = random.choice(["🍣", "♟️", "💿", "🥜", "🎴", "🀄", "🃏", "👻", "🐑", "🦕", "🎲", "🛕", "🎆", "🪺"])
 
 
 async def change_activity():
+    activity = random.choice(["🍣", "♟️", "💿", "🥜", "🎴", "🀄", "🃏", "👻", "🐑", "🦕", "🎲", "🛕", "🎆", "🪺"])
     await client.change_presence(activity=discord.Game(activity))
     await asyncio.sleep(25000)
     await change_activity()
