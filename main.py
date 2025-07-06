@@ -19,7 +19,7 @@ tree = app_commands.CommandTree(client)
 @client.event
 async def on_ready():
     try:
-        activity = f"テスト"
+        activity = random.choice(["🍣", "♟️", "💿", "🥜", "🎴", "🀄", "🃏", "👻", "🐑", "🦕", "🎲", "🛕", "🎆", "🪺"])
         await client.change_presence(activity=discord.Game(activity))
         await tree.sync()
         print("コマンドが正常に同期されました。")
@@ -37,31 +37,56 @@ async def hello(interaction: discord.Interaction):
 @tree.command(name="info_sokaikun", description="Sokaikunについて説明します。")
 async def info_sokaikun(interaction: discord.Interaction):
   await interaction.response.send_message(
-      "# チェス研究会　総会管理bot　[Sokaikun]について/n"
-      "## はじめに/nSokaikunはIchikyoが作成したチェス研究会用のDiscordBotです。"
+      "# チェス研総会管理bot [Sokaikun]について\n"
+      "## はじめに\n"
+      "Sokaikunはichikiyoが作成したチェス研究会用のDiscordBotです。"
       "GitHubにアップロードしたソースコードをRenderとUptimeRobotによって常時起動しているため、"
-      "それらのサイトやDiscord自体の変更によって機能停止する場合があることをご了承ください。/n"
-      "サーバーでのコマンド実行が主な機能ですが、一部のコマンドはSokaikunへのDMでも実行可能です。/n"
-      "## コマンド/n- **/hello** [DMでも実行可能]/n"
+      "それらのサイトやDiscord自体の変更によって機能停止する場合があることをご了承ください。\n"
+      "サーバーでのコマンド実行が主な機能ですが、一部のコマンドはSokaikunへのDMでも実行可能です。\n"
+      "## 必要なセットアップ\n"
+      "Sokaikunに管理者権限を与えてサーバーに招待したら、それぞれロール名が 参加者 , 委任者 , 委任宣言者 である3つのロールを作成し、"
+      "Sokaikunのロールをそれらより上位に設定してください。"
+      "また、総会を行うボイスチャンネルの名前は 総会 としておいてください。\n"
+      "## コマンド\n"
+      "- **/hello** [DMでも実行可能]\n"
       "Hello, World!と返します。テスト用コマンドです。"
-      "原因不明のエラーが出た時など、Sokaikunが動作しているかを確かめるためにも使えます。/n"
-      "- **info_sokaikun** [DMでも実行可能]/n"
-      "このメッセージを返します。コマンドの説明を出すのに便利です。/n"
-      "- **/dice** [DMでも実行可能]/n"
+      "原因不明のエラーが出た時など、Sokaikunが動作しているかを確かめるためにも使えます。\n"
+      "- **info_sokaikun** [DMでも実行可能]\n"
+      "このメッセージを返します。コマンドの説明を出すのに便利です。\n"
+      "- **/dice** [DMでも実行可能]\n"
       "引数にダイスコマンドを入れるとダイスを振ります。"
       "◯d◯、◯d◯+◯など、ダイスコマンドや数値同士の加算も可能です。"
-      "減算は実装されていませんが、1d3+-1のようにマイナスの数値を足すことはできます。/n"
-      "- **/rolepanel**/n"
+      "減算は実装されていませんが、1d3+-1のようにマイナスの数値を足すことはできます。\n"
+      "- **/rolepanel**\n"
       "ボタンを押すことでロールの付与・剥奪が可能なパネルを作成します。"
       "引数にロールを入れることで対応するボタンが増えます。"
       "ボタンを押すと自身にロールが付与され、既に付与されていた場合は剥奪されます。"
-      "最後の引数のdescriptionはよく分かりません。/n"
-      "- **/del** [管理者のみ実行可能]/n"
+      "最後の引数のdescriptionはよく分かりません。\n"
+      "- **/del** [管理者のみ実行可能]\n"
       "委任宣言を行うボタンを作成します。"
       "**/rolepanel**の仕組みを応用して、[委任宣言者]という名前のロールに対応するボタンが作成されます。"
       "次回総会を委任予定の人は押してください。委任票は参加者へランダムに振り分けられます。"
-      "但し、特定の人物に票を委任したい場合はボタンを押さずに一般チャンネルへ書き込んでください。/n"
-      "
+      "但し、特定の人物に票を委任したい場合はボタンを押さずに一般チャンネルへ書き込んでください。\n"
+      "- **/sokai_1** [管理者のみ実行可能]\n"
+      "ボイスチャンネル 総会 に接続しているメンバーを取得し、参加者一覧として表示します。"
+      "また、その時点での委任宣言者ロールの保有者数を委任票として、参加者へランダムに振り分けます。"
+      "獲得した委任票の数は参加者一覧の名前横に (+◯) の形で表示され、その数が余分に獲得した投票数となります。"
+      "獲得した委任票が0票の場合は名前横に何も表示されません。"
+      "このコマンドを実行後、 [参加者ロール保有者] = [ボイスチャンネル総会に接続していたメンバー] となります。\n"
+      "- **/sokai_2** [管理者のみ実行可能]\n"
+      "委任宣言者ロール保有者を取得し、委任者一覧として表示します。"
+      "このコマンドを実行後、 [委任者ロール保有者] = [元委任宣言者ロール保有者] , [委任宣言者ロール保有者] = [なし] となります。\n"
+      "**/sokai_1**および**/sokai_2**は、特定の人物への名指し委任があった場合を想定して分離されています。"
+      "**/sokai_1**を実行後、名指しで委任を行った委任者に手動で委任宣言者ロールを付与し、**/sokai_2**を実行してください。"
+      "名指しの委任は参加者一覧に計上できないため、各自で確認する必要があります。\n"
+      "- **/sokai_all** [管理者のみ実行可能]\n"
+      "**/sokai_1**と**/sokai_2**をつなげて使用できるコマンドです。"
+      "名指しの委任が無かった場合、すなわち全員が**/del**のボタンで委任を宣言した場合にはこのコマンドを使用してください。\n"
+      "## おわりに\n"
+      "このBotを作るにあたって、ichikiyoはいろんなところからコードをパクってきました。"
+      "Python弱者がブラックボックスをブラックボックスのまま合成したキメラがSokaikunです。"
+      "「なんか挙動がおかしいな」と思ったあなたの感覚は正しいかもしれませんので、臆せず意見を寄せてください。"
+      "暇だったら直します。"
   )
 
 
@@ -122,7 +147,7 @@ async def delpanel(interaction: Interaction):
     await interaction.channel.send(embed=del_embed, view=view)
 
 
-@tree.command(name="sokai_1", description="総会Step1 出席者更新&委任票集計 要管理者権限")
+@tree.command(name="sokai_1", description="総会Step1 参加者更新&委任票集計 要管理者権限")
 @discord.app_commands.guild_only()
 @discord.app_commands.default_permissions(administrator=True)
 async def sokai_1(interaction: Interaction):
@@ -134,7 +159,7 @@ async def sokai_1(interaction: Interaction):
   if del_role == None:
       await interaction.response.send_message("エラー: ロール[委任宣言者]を見つけられませんでした。", ephemeral=True)
       return
-  pre_role = discord.utils.get(interaction.guild.roles, name = "出席者")
+  pre_role = discord.utils.get(interaction.guild.roles, name = "参加者")
   if pre_role:
       for i in pre_role.members:
           try:
@@ -143,9 +168,9 @@ async def sokai_1(interaction: Interaction):
               await interaction.response.send_message("エラー: ロールを削除できません。権限が不足している可能性があります。", ephemeral=True)
               return
   else:
-      await interaction.response.send_message("エラー: ロール[出席者]を見つけられませんでした。", ephemeral=True)
+      await interaction.response.send_message("エラー: ロール[参加者]を見つけられませんでした。", ephemeral=True)
       return
-  sokai_1_message = "総会\n### 出席者\n"
+  sokai_1_message = "総会\n### 参加者\n"
   del_member = del_role.members
   pre_member = sokai_vc.members
   del_number = [0]*len(pre_member)
@@ -203,7 +228,7 @@ async def sokai_all(interaction: Interaction):
   if del_role == None:
       await interaction.response.send_message("エラー: ロール[委任宣言者]を見つけられませんでした。", ephemeral=True)
       return
-  pre_role = discord.utils.get(interaction.guild.roles, name = "出席者")
+  pre_role = discord.utils.get(interaction.guild.roles, name = "参加者")
   if pre_role:
       for i in pre_role.members:
           try:
@@ -212,7 +237,7 @@ async def sokai_all(interaction: Interaction):
               await interaction.response.send_message("エラー: ロールを削除できません。権限が不足している可能性があります。", ephemeral=True)
               return
   else:
-      await interaction.response.send_message("エラー: ロール[出席者]を見つけられませんでした。", ephemeral=True)
+      await interaction.response.send_message("エラー: ロール[参加者]を見つけられませんでした。", ephemeral=True)
       return
   deled_role = discord.utils.get(interaction.guild.roles, name = "委任者")
   if deled_role:
@@ -222,7 +247,7 @@ async def sokai_all(interaction: Interaction):
           except discord.Forbidden:
               await interaction.response.send_message("エラー: ロールを削除できません。権限が不足している可能性があります。", ephemeral=True)
               return
-  sokai_all_message = "総会\n### 出席者\n"
+  sokai_all_message = "総会\n### 参加者\n"
   del_member = del_role.members
   pre_member = sokai_vc.members
   del_number = [0]*len(pre_member)
