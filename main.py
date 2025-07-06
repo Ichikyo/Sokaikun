@@ -33,9 +33,36 @@ async def hello(interaction: discord.Interaction):
   await interaction.response.send_message("Hello, World!")
 
 
+# 説明
 @tree.command(name="info_sokaikun", description="Sokaikunについて説明します。")
 async def info_sokaikun(interaction: discord.Interaction):
-  await interaction.response.send_message("# チェス研究会　総会管理bot　[Sokaikun]について/n## はじめに/nSokaikunはIchikyoが作成したチェス研究会用のDiscordBotです。GitHubにアップロードしたソースコードをRenderとUptimeRobotによって常時起動しているため、それらのサイトやDiscord自体の変更によって機能停止する場合があることをご了承ください。/nサーバーでのコマンド実行が主な機能ですが、一部のコマンドはSokaikunへのDMでも実行可能です。/n")
+  await interaction.response.send_message(
+      "# チェス研究会　総会管理bot　[Sokaikun]について/n"
+      "## はじめに/nSokaikunはIchikyoが作成したチェス研究会用のDiscordBotです。"
+      "GitHubにアップロードしたソースコードをRenderとUptimeRobotによって常時起動しているため、"
+      "それらのサイトやDiscord自体の変更によって機能停止する場合があることをご了承ください。/n"
+      "サーバーでのコマンド実行が主な機能ですが、一部のコマンドはSokaikunへのDMでも実行可能です。/n"
+      "## コマンド/n- **/hello** [DMでも実行可能]/n"
+      "Hello, World!と返します。テスト用コマンドです。"
+      "原因不明のエラーが出た時など、Sokaikunが動作しているかを確かめるためにも使えます。/n"
+      "- **info_sokaikun** [DMでも実行可能]/n"
+      "このメッセージを返します。コマンドの説明を出すのに便利です。/n"
+      "- **/dice** [DMでも実行可能]/n"
+      "引数にダイスコマンドを入れるとダイスを振ります。"
+      "◯d◯、◯d◯+◯など、ダイスコマンドや数値同士の加算も可能です。"
+      "減算は実装されていませんが、1d3+-1のようにマイナスの数値を足すことはできます。/n"
+      "- **/rolepanel**/n"
+      "ボタンを押すことでロールの付与・剥奪が可能なパネルを作成します。"
+      "引数にロールを入れることで対応するボタンが増えます。"
+      "ボタンを押すと自身にロールが付与され、既に付与されていた場合は剥奪されます。"
+      "最後の引数のdescriptionはよく分かりません。/n"
+      "- **/del** [管理者のみ実行可能]/n"
+      "委任宣言を行うボタンを作成します。"
+      "**/rolepanel**の仕組みを応用して、[委任宣言者]という名前のロールに対応するボタンが作成されます。"
+      "次回総会を委任予定の人は押してください。委任票は参加者へランダムに振り分けられます。"
+      "但し、特定の人物に票を委任したい場合はボタンを押さずに一般チャンネルへ書き込んでください。/n"
+      "
+  )
 
 
 # ダイスボット
