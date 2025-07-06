@@ -9,6 +9,8 @@ import numpy as np
 import os
 from keep_alive import keep_alive
 import json
+import asyncio
+
 
 intents = discord.Intents.all()
 client = discord.Client(intents=intents) 
@@ -19,12 +21,18 @@ tree = app_commands.CommandTree(client)
 @client.event
 async def on_ready():
     try:
-        activity = random.choice(["🍣", "♟️", "💿", "🥜", "🎴", "🀄", "🃏", "👻", "🐑", "🦕", "🎲", "🛕", "🎆", "🪺"])
-        await client.change_presence(activity=discord.Game(activity))
+        await change_activity()
         await tree.sync()
         print("コマンドが正常に同期されました。")
     except Exception as e:
         print(f"コマンドの同期中にエラーが発生しました: {e}")
+    activity = random.choice(["🍣", "♟️", "💿", "🥜", "🎴", "🀄", "🃏", "👻", "🐑", "🦕", "🎲", "🛕", "🎆", "🪺"])
+
+
+async def change_activity():
+    await client.change_presence(activity=discord.Game(activity))
+    await asyncio.sleep(25000)
+    await change_activity()
 
 
 # テスト用コマンド
