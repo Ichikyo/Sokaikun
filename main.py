@@ -33,8 +33,8 @@ async def hello(interaction: discord.Interaction):
   await interaction.response.send_message("Hello, World!")
 
 
-@tree.command(name="info_Sokaikun", description="Sokaikunについて説明します。")
-async def info_Sokaikun(interaction: discord.Interaction):
+@tree.command(name="info_sokaikun", description="Sokaikunについて説明します。")
+async def info_sokaikun(interaction: discord.Interaction):
   await interaction.response.send_message("# チェス研究会　総会管理bot　[Sokaikun]について/n## はじめに/nSokaikunはIchikyoが作成したチェス研究会用のDiscordBotです。GitHubにアップロードしたソースコードをRenderとUptimeRobotによって常時起動しているため、それらのサイトやDiscord自体の変更によって機能停止する場合があることをご了承ください。/nサーバーでのコマンド実行が主な機能ですが、一部のコマンドはSokaikunへのDMでも実行可能です。/n")
 
 
