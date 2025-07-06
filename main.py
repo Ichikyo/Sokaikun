@@ -47,6 +47,8 @@ async def info_sokaikun(interaction: discord.Interaction):
       "Sokaikunに管理者権限を与えてサーバーに招待したら、それぞれロール名が 参加者 , 委任者 , 委任宣言者 である3つのロールを作成し、"
       "Sokaikunのロールをそれらより上位に設定してください。"
       "また、総会を行うボイスチャンネルの名前は 総会 としておいてください。\n"
+      "__**※注意 このとき絶対にSokaikunを管理者などの重要なロールより上位にしてはいけません。"
+      "Sokaikunより下位のロールは/rolepanelによりだれでも（明示的にですが）取得可能になります。**__\n"
       "## コマンド\n"
       "- **/hello** [DMでも実行可能]\n"
       "Hello, World!と返します。テスト用コマンドです。"
@@ -286,7 +288,7 @@ async def rolepanel(interaction: Interaction,ロール1: discord.Role,ロール2
         description="パネルを作成しました！",
         color=discord.Color.green(),
     )
-    await interaction.response.send_message(embed=warning_embed, ephemeral=True)
+    await interaction.response.send_message(embed=warning_embed)
     panel_embed = discord.Embed(title='ロールパネル', color=discord.Color.green())
     buttons = []
     role_data = []
