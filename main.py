@@ -21,18 +21,18 @@ tree = app_commands.CommandTree(client)
 @client.event
 async def on_ready():
     try:
-        await change_activity()
         await tree.sync()
         print("コマンドが正常に同期されました。")
     except Exception as e:
         print(f"コマンドの同期中にエラーが発生しました: {e}")
+    while True:
+        await change_activity()
 
 
 async def change_activity():
     activity = random.choice(["🍣", "♟️", "💿", "🥜", "🎴", "🀄", "🃏", "👻", "🐑", "🦕", "🎲", "🛕", "🎆", "🪺"])
     await client.change_presence(activity=discord.Game(activity))
     await asyncio.sleep(25000)
-    await change_activity()
 
 
 # テスト用コマンド
