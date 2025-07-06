@@ -8,6 +8,7 @@ import re
 import numpy as np
 import os
 from keep_alive import keep_alive
+import json
 
 intents = discord.Intents.all()
 client = discord.Client(intents=intents) 
@@ -30,6 +31,11 @@ async def on_ready():
 @tree.command(name="hello", description="Say hello to the world!") 
 async def hello(interaction: discord.Interaction): 
   await interaction.response.send_message("Hello, World!")
+
+
+@tree.command(name="info_Sokaikun", description="Sokaikunについて説明します。")
+async def info_Sokaikun(interaction: discord.Interaction):
+  await interaction.response.send_message("# チェス研究会　総会管理bot　[Sokaikun]について/n## はじめに/nSokaikunはIchikyoが作成したチェス研究会用のDiscordBotです。GitHubにアップロードしたソースコードをRenderとUptimeRobotによって常時起動しているため、それらのサイトやDiscord自体の変更によって機能停止する場合があることをご了承ください。/nサーバーでのコマンド実行が主な機能ですが、一部のコマンドはSokaikunへのDMでも実行可能です。/n")
 
 
 # ダイスボット
@@ -215,6 +221,61 @@ async def sokai_all(interaction: Interaction):
   await interaction.response.send_message(sokai_all_message.replace("(+0)", ""))
 
 
+
+# ロールパネル
+role_panel_message = None
+@tree.command(name='rolepanel', description='ロールパネルを作成します')
+@app_commands.describe(description='ロールパネルの説明',)
+@discord.app_commands.guild_only()
+@discord.app_commands.default_permissions(administrator=True)
+async def rolepanel(interaction: Interaction,ロール1: discord.Role,ロール2: Optional[discord.Role] = None,ロール3: Optional[discord.Role] = None,ロール4: Optional[discord.Role] = None,ロール5: Optional[discord.Role] = None,ロール6: Optional[discord.Role] = None,ロール7: Optional[discord.Role] = None,ロール8: Optional[discord.Role] = None,ロール9: Optional[discord.Role] = None,ロール10: Optional[discord.Role] = None,ロール11: Optional[discord.Role] = None,ロール12: Optional[discord.Role] = None,ロール13: Optional[discord.Role] = None,ロール14: Optional[discord.Role] = None,ロール15: Optional[discord.Role] = None,ロール16: Optional[discord.Role] = None,ロール17: Optional[discord.Role] = None,ロール18: Optional[discord.Role] = None,ロール19: Optional[discord.Role] = None,ロール20: Optional[discord.Role] = None,ロール21: Optional[discord.Role] = None,ロール22: Optional[discord.Role] = None,ロール23: Optional[discord.Role] = None,ロール24: Optional[discord.Role] = None,description:str=''):
+    global role_panel_message
+    warning_embed = discord.Embed(
+        description="パネルを作成しました！",
+        color=discord.Color.green(),
+    )
+    await interaction.response.send_message(embed=warning_embed, ephemeral=True)
+    panel_embed = discord.Embed(title='ロールパネル', color=discord.Color.green())
+    buttons = []
+    role_data = []
+    roles = [
+        ロール1, ロール2, ロール3, ロール4, ロール5,
+        ロール6, ロール7, ロール8, ロール9, ロール10,
+        ロール11, ロール12, ロール13, ロール14, ロール15,
+        ロール16, ロール17, ロール18, ロール19, ロール20,
+        ロール21, ロール22, ロール23, ロール24,
+    ]
+    view = discord.ui.View()
+    left_description_text = ""
+    left_value_text = ""
+    right_description_text = ""
+    right_value_text = ""
+    for i, role in enumerate(roles):
+        if role:
+            custom_id = f"rolepanel{i + 1}"
+            button = discord.ui.Button(style=discord.ButtonStyle.primary, custom_id=custom_id, label=str(i+1))
+            buttons.append(button)
+            view.add_item(button)
+            role_data.append({"rolenumber": i + 1, "rolename": role.name, "roleid": str(role.id)})
+            if i < 12:
+                left_description_text += f"{i + 1}: {role.mention}\n"
+                left_value_text += f"{i + 1}: {role.mention}\n"
+            else:
+                right_description_text += f"{i + 1}: {role.mention}\n"
+                right_value_text += f"{i + 1}: {role.mention}\n"
+    panel_embed.add_field(name='', value=description, inline=False)
+    panel_embed.add_field(name='', value=left_value_text, inline=True)
+    panel_embed.add_field(name='', value=right_value_text, inline=True)
+    role_panel_message = await interaction.channel.send(embed=panel_embed, view=view)
+    directory_path = f'data/{interaction.guild.id}/{interaction.channel.id}/rolepanel/'
+    os.makedirs(directory_path, exist_ok=True)
+    role_panel_message_id = role_panel_message.id
+    role_data.append({"message_id": role_panel_message_id})
+    file_path = f'{directory_path}{role_panel_message_id}.json'
+    with open(file_path, 'w', encoding='utf-8') as json_file:
+        json.dump(role_data, json_file, ensure_ascii=False, indent=4)
+    print(f"ロールパネルのメッセージID: {role_panel_message_id}")
+
 @client.event
 async def on_interaction(inter:discord.Interaction):
     try:
@@ -250,6 +311,42 @@ async def on_button_click(interaction: discord.Interaction):
                   await interaction.response.send_message("エラー: ロールを付与できません。権限が不足している可能性があります。", ephemeral=True)
           else:
               await interaction.response.send_message("エラー: ロール[委任宣言者]を見つけられませんでした。", ephemeral=True)
+  elif custom_id.startswith("rolepanel"):
+      role_number = int(custom_id.replace("rolepanel", ""))
+      try:
+          role_panel_message = await interaction.channel.fetch_message(interaction.message.id)
+      except discord.HTTPException as e:
+          print(f"Error fetching message: {e}")
+          await interaction.response.send_message("エラー: メッセージを取得できませんでした。", ephemeral=True)
+          return
+      file_path = f'data/{interaction.guild.id}/{interaction.channel.id}/rolepanel/{interaction.message.id}.json'
+      try:
+          with open(file_path, 'r', encoding='utf-8') as json_file:
+              role_data = json.load(json_file)
+      except FileNotFoundError:
+          print(f"File not found: {file_path}")
+          await interaction.response.send_message("対応するファイルが見つかりませんでした。", ephemeral=True)
+          return
+      selected_role = next((role for role in role_data if role.get("rolenumber") == role_number), None)
+      if selected_role:
+          if discord.utils.get(member.roles, id=int(selected_role["roleid"])):
+              try:
+                  await member.remove_roles(discord.Object(int(selected_role["roleid"])))
+                  await interaction.response.send_message(f"ロールを削除しました: {selected_role['rolename']}", ephemeral=True)
+              except discord.Forbidden:
+                  await interaction.response.send_message("エラー: ロールを削除できません。権限が不足している可能性があります。", ephemeral=True)
+          else:
+              role = interaction.guild.get_role(int(selected_role["roleid"]))
+              if role:
+                  try:
+                      await member.add_roles(role)
+                      await interaction.response.send_message(f"ロールを付与しました: {selected_role['rolename']}", ephemeral=True)
+                  except discord.Forbidden:
+                      await interaction.response.send_message("エラー: ロールを付与できません。権限が不足している可能性があります。", ephemeral=True)
+              else:
+                  await interaction.response.send_message("エラー: ロールを見つけられませんでした。", ephemeral=True)
+      else:
+          await interaction.response.send_message(f"エラー: ロール番号 {role_number} が見つかりませんでした。", ephemeral=True)
 
 
 TOKEN = os.getenv("DISCORD_TOKEN")
