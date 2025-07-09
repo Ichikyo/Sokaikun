@@ -161,6 +161,7 @@ async def delpanel(interaction: Interaction):
 @discord.app_commands.guild_only()
 @discord.app_commands.default_permissions(administrator=True)
 async def sokai_1(interaction: Interaction):
+  await interaction.response.send_message()
   sokai_vc = discord.utils.get(interaction.guild.voice_channels, name = "総会")
   if sokai_vc.members == []:
       await interaction.response.send_message("エラー: ボイスチャンネル[総会]に誰もいません。", ephemeral=True)
@@ -173,7 +174,7 @@ async def sokai_1(interaction: Interaction):
   if pre_role:
       for i in pre_role.members:
           try:
-              await i.remove_roles(discord.Object(int(pre_role.id)))
+              await i.remove_roles(pre_role)
           except discord.Forbidden:
               await interaction.response.send_message("エラー: ロールを削除できません。権限が不足している可能性があります。", ephemeral=True)
               return
@@ -202,6 +203,7 @@ async def sokai_1(interaction: Interaction):
 @discord.app_commands.guild_only()
 @discord.app_commands.default_permissions(administrator=True)
 async def sokai_2(interaction: Interaction):
+  await interaction.response.send_message()
   del_role = discord.utils.get(interaction.guild.roles, name = "委任宣言者")
   if del_role == None:
       await interaction.response.send_message("エラー: ロール[委任宣言者]を見つけられませんでした。", ephemeral=True)
