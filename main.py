@@ -206,7 +206,7 @@ async def sokai_2(interaction: Interaction):
   await interaction.response.defer(thinking=True)
   del_role = discord.utils.get(interaction.guild.roles, name = "委任宣言者")
   if del_role == None:
-      await interaction.response.send_message("エラー: ロール[委任宣言者]を見つけられませんでした。", ephemeral=True)
+      await interaction.followup.send("エラー: ロール[委任宣言者]を見つけられませんでした。", ephemeral=True)
       return
   deled_role = discord.utils.get(interaction.guild.roles, name = "委任者")
   if deled_role:
@@ -214,19 +214,19 @@ async def sokai_2(interaction: Interaction):
           try:
               await i.remove_roles(discord.Object(int(deled_role.id)))
           except discord.Forbidden:
-              await interaction.response.send_message("エラー: ロールを削除できません。権限が不足している可能性があります。", ephemeral=True)
+              await interaction.followup.send("エラー: ロールを削除できません。権限が不足している可能性があります。", ephemeral=True)
               return
   for i in del_role.members:
       try:
           await i.add_roles(deled_role)
           await i.remove_roles(discord.Object(int(del_role.id)))
       except discord.Forbidden:
-          await interaction.response.send_message("エラー: ロールを付与または削除できません。権限が不足している可能性があります。", ephemeral=True)
+          await interaction.followup.send("エラー: ロールを付与または削除できません。権限が不足している可能性があります。", ephemeral=True)
           return
   new_deled_role = discord.utils.get(interaction.guild.roles, name = "委任者")
   sokai_2_message = "### 委任者\n"
   sokai_2_message += "、".join(i.display_name for i in new_deled_role.members)
-  await interaction.response.send_message(sokai_2_message)
+  await interaction.followup.send(sokai_2_message)
 
 
 @tree.command(name="sokai_all", description="総会Step1&2 要管理者権限")
@@ -236,11 +236,11 @@ async def sokai_all(interaction: Interaction):
   await interaction.response.defer(thinking=True)
   sokai_vc = discord.utils.get(interaction.guild.voice_channels, name = "総会")
   if sokai_vc.members == []:
-      await interaction.response.send_message("エラー: ボイスチャンネル[総会]に誰もいません。", ephemeral=True)
+      await interaction.followup.send("エラー: ボイスチャンネル[総会]に誰もいません。", ephemeral=True)
       return
   del_role = discord.utils.get(interaction.guild.roles, name = "委任宣言者")
   if del_role == None:
-      await interaction.response.send_message("エラー: ロール[委任宣言者]を見つけられませんでした。", ephemeral=True)
+      await interaction.followup.send("エラー: ロール[委任宣言者]を見つけられませんでした。", ephemeral=True)
       return
   pre_role = discord.utils.get(interaction.guild.roles, name = "参加者")
   if pre_role:
@@ -248,10 +248,10 @@ async def sokai_all(interaction: Interaction):
           try:
               await i.remove_roles(discord.Object(int(pre_role.id)))
           except discord.Forbidden:
-              await interaction.response.send_message("エラー: ロールを削除できません。権限が不足している可能性があります。", ephemeral=True)
+              await interaction.followup.send("エラー: ロールを削除できません。権限が不足している可能性があります。", ephemeral=True)
               return
   else:
-      await interaction.response.send_message("エラー: ロール[参加者]を見つけられませんでした。", ephemeral=True)
+      await interaction.followup.send("エラー: ロール[参加者]を見つけられませんでした。", ephemeral=True)
       return
   deled_role = discord.utils.get(interaction.guild.roles, name = "委任者")
   if deled_role:
@@ -259,7 +259,7 @@ async def sokai_all(interaction: Interaction):
           try:
               await i.remove_roles(discord.Object(int(deled_role.id)))
           except discord.Forbidden:
-              await interaction.response.send_message("エラー: ロールを削除できません。権限が不足している可能性があります。", ephemeral=True)
+              await interaction.followup.send("エラー: ロールを削除できません。権限が不足している可能性があります。", ephemeral=True)
               return
   sokai_all_message = "総会\n### 参加者\n"
   del_member = del_role.members
@@ -273,19 +273,19 @@ async def sokai_all(interaction: Interaction):
       try:
           await i.add_roles(pre_role)
       except discord.Forbidden:
-          await interaction.response.send_message("エラー: ロールを付与できません。権限が不足している可能性があります。", ephemeral=True)
+          await interaction.followup.send("エラー: ロールを付与できません。権限が不足している可能性があります。", ephemeral=True)
           return
   for i in del_role.members:
       try:
           await i.add_roles(deled_role)
           await i.remove_roles(discord.Object(int(del_role.id)))
       except discord.Forbidden:
-          await interaction.response.send_message("エラー: ロールを付与または削除できません。権限が不足している可能性があります。", ephemeral=True)
+          await interaction.followup.send("エラー: ロールを付与または削除できません。権限が不足している可能性があります。", ephemeral=True)
           return
   new_deled_role = discord.utils.get(interaction.guild.roles, name = "委任者")
   sokai_all_message += "\n### 委任者\n"
   sokai_all_message += "、".join(i.display_name for i in new_deled_role.members)
-  await interaction.response.send_message(sokai_all_message.replace("(+0)", ""))
+  await interaction.followup.send(sokai_all_message.replace("(+0)", ""))
 
 
 
