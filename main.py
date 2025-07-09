@@ -221,8 +221,9 @@ async def sokai_2(interaction: Interaction):
       except discord.Forbidden:
           await interaction.response.send_message("エラー: ロールを付与または削除できません。権限が不足している可能性があります。", ephemeral=True)
           return
+  new_deled_role = discord.utils.get(interaction.guild.roles, name = "委任者")
   sokai_2_message = "### 委任者\n"
-  sokai_2_message += "、".join(i.display_name for i in deled_role.members)
+  sokai_2_message += "、".join(i.display_name for i in new_deled_role.members)
   await interaction.response.send_message(sokai_2_message)
 
 
@@ -278,8 +279,9 @@ async def sokai_all(interaction: Interaction):
       except discord.Forbidden:
           await interaction.response.send_message("エラー: ロールを付与または削除できません。権限が不足している可能性があります。", ephemeral=True)
           return
+  new_deled_role = discord.utils.get(interaction.guild.roles, name = "委任者")
   sokai_all_message += "\n### 委任者\n"
-  sokai_all_message += "、".join(i.display_name for i in deled_role.members)
+  sokai_all_message += "、".join(i.display_name for i in new_deled_role.members)
   await interaction.response.send_message(sokai_all_message.replace("(+0)", ""))
 
 
@@ -289,7 +291,6 @@ role_panel_message = None
 @tree.command(name='rolepanel', description='ロールパネルを作成します')
 @app_commands.describe(description='ロールパネルの説明',)
 @discord.app_commands.guild_only()
-@discord.app_commands.default_permissions(administrator=True)
 async def rolepanel(interaction: Interaction,ロール1: discord.Role,ロール2: Optional[discord.Role] = None,ロール3: Optional[discord.Role] = None,ロール4: Optional[discord.Role] = None,ロール5: Optional[discord.Role] = None,ロール6: Optional[discord.Role] = None,ロール7: Optional[discord.Role] = None,ロール8: Optional[discord.Role] = None,ロール9: Optional[discord.Role] = None,ロール10: Optional[discord.Role] = None,ロール11: Optional[discord.Role] = None,ロール12: Optional[discord.Role] = None,ロール13: Optional[discord.Role] = None,ロール14: Optional[discord.Role] = None,ロール15: Optional[discord.Role] = None,ロール16: Optional[discord.Role] = None,ロール17: Optional[discord.Role] = None,ロール18: Optional[discord.Role] = None,ロール19: Optional[discord.Role] = None,ロール20: Optional[discord.Role] = None,ロール21: Optional[discord.Role] = None,ロール22: Optional[discord.Role] = None,ロール23: Optional[discord.Role] = None,ロール24: Optional[discord.Role] = None,description:str=''):
     global role_panel_message
     warning_embed = discord.Embed(
