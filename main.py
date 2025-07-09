@@ -161,14 +161,14 @@ async def delpanel(interaction: Interaction):
 @discord.app_commands.guild_only()
 @discord.app_commands.default_permissions(administrator=True)
 async def sokai_1(interaction: Interaction):
-  await interaction.response.send_message("Hello, World!")   
+  await interaction.response.defer(thinking=True)  
   sokai_vc = discord.utils.get(interaction.guild.voice_channels, name = "総会")
   if sokai_vc.members == []:
-      await interaction.response.send_message("エラー: ボイスチャンネル[総会]に誰もいません。", ephemeral=True)
+      await interaction.followup.send("エラー: ボイスチャンネル[総会]に誰もいません。", ephemeral=True)
       return
   del_role = discord.utils.get(interaction.guild.roles, name = "委任宣言者")
   if del_role == None:
-      await interaction.response.send_message("エラー: ロール[委任宣言者]を見つけられませんでした。", ephemeral=True)
+      await interaction.followup.send("エラー: ロール[委任宣言者]を見つけられませんでした。", ephemeral=True)
       return
   pre_role = discord.utils.get(interaction.guild.roles, name = "参加者")
   if pre_role:
@@ -176,34 +176,34 @@ async def sokai_1(interaction: Interaction):
           try:
               await i.remove_roles(pre_role)
           except discord.Forbidden:
-              await interaction.response.send_message("エラー: ロールを削除できません。権限が不足している可能性があります。", ephemeral=True)
+              await interaction.followup.send("エラー: ロールを削除できません。権限が不足している可能性があります。", ephemeral=True)
               return
   else:
-      await interaction.response.send_message("エラー: ロール[参加者]を見つけられませんでした。", ephemeral=True)
+      await interaction.followup.send("エラー: ロール[参加者]を見つけられませんでした。", ephemeral=True)
       return
   sokai_1_message = "総会\n### 参加者\n"
   del_member = del_role.members
   pre_member = sokai_vc.members
   del_number = [0]*len(pre_member)
   del_number_index = random.choices(range(len(pre_member)), k = len(del_member))
-  print(del_number_index)
   for i in del_number_index:
       del_number[i] += 1
   sokai_1_message += "、".join([pre_member[i].display_name + f"(+{str(del_number[i])})" for i in range(len(pre_member))])
-  await interaction.response.send_message(sokai_1_message.replace("(+0)", ""))
   for i in pre_member:
       try:
           await i.add_roles(pre_role)
       except discord.Forbidden:
-          await interaction.response.send_message("エラー: ロールを付与できません。権限が不足している可能性があります。", ephemeral=True)
+          await interaction.followup.send("エラー: ロールを付与できません。権限が不足している可能性があります。", ephemeral=True)
           return
+  await interaction.followup.send(sokai_1_message.replace("(+0)", ""))
+
 
 
 @tree.command(name="sokai_2", description="総会Step2 委任者更新 要管理者権限")
 @discord.app_commands.guild_only()
 @discord.app_commands.default_permissions(administrator=True)
 async def sokai_2(interaction: Interaction):
-  await interaction.response.send_message("Hello, World!")
+  await interaction.response.defer(thinking=True)
   del_role = discord.utils.get(interaction.guild.roles, name = "委任宣言者")
   if del_role == None:
       await interaction.response.send_message("エラー: ロール[委任宣言者]を見つけられませんでした。", ephemeral=True)
@@ -233,7 +233,7 @@ async def sokai_2(interaction: Interaction):
 @discord.app_commands.guild_only()
 @discord.app_commands.default_permissions(administrator=True)
 async def sokai_all(interaction: Interaction):
-  await interaction.response.send_message("Hello, World!")
+  await interaction.response.defer(thinking=True)
   sokai_vc = discord.utils.get(interaction.guild.voice_channels, name = "総会")
   if sokai_vc.members == []:
       await interaction.response.send_message("エラー: ボイスチャンネル[総会]に誰もいません。", ephemeral=True)
