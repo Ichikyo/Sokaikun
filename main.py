@@ -161,7 +161,7 @@ async def delpanel(interaction: Interaction):
 @discord.app_commands.guild_only()
 @discord.app_commands.default_permissions(administrator=True)
 async def sokai_1(interaction: Interaction):
-  await interaction.response.send_message()
+  await interaction.response.defer(thinking=True)
   sokai_vc = discord.utils.get(interaction.guild.voice_channels, name = "総会")
   if sokai_vc.members == []:
       await interaction.response.send_message("エラー: ボイスチャンネル[総会]に誰もいません。", ephemeral=True)
@@ -195,7 +195,7 @@ async def sokai_1(interaction: Interaction):
       try:
           await i.add_roles(pre_role)
       except discord.Forbidden:
-          await interaction.response.send_message("エラー: ロールを付与できません。権限が不足している可能性があります。", ephemeral=True)
+          await interaction.folloeup.send_message("エラー: ロールを付与できません。権限が不足している可能性があります。", ephemeral=True)
           return
 
 
@@ -203,7 +203,7 @@ async def sokai_1(interaction: Interaction):
 @discord.app_commands.guild_only()
 @discord.app_commands.default_permissions(administrator=True)
 async def sokai_2(interaction: Interaction):
-  await interaction.response.send_message()
+  await interaction.response.defer(thinking=True)
   del_role = discord.utils.get(interaction.guild.roles, name = "委任宣言者")
   if del_role == None:
       await interaction.response.send_message("エラー: ロール[委任宣言者]を見つけられませんでした。", ephemeral=True)
@@ -226,13 +226,14 @@ async def sokai_2(interaction: Interaction):
   new_deled_role = discord.utils.get(interaction.guild.roles, name = "委任者")
   sokai_2_message = "### 委任者\n"
   sokai_2_message += "、".join(i.display_name for i in new_deled_role.members)
-  await interaction.response.send_message(sokai_2_message)
+  await interaction.followup.send_message(sokai_2_message)
 
 
 @tree.command(name="sokai_all", description="総会Step1&2 要管理者権限")
 @discord.app_commands.guild_only()
 @discord.app_commands.default_permissions(administrator=True)
 async def sokai_all(interaction: Interaction):
+  await interaction.response.defer(thinking=True)
   sokai_vc = discord.utils.get(interaction.guild.voice_channels, name = "総会")
   if sokai_vc.members == []:
       await interaction.response.send_message("エラー: ボイスチャンネル[総会]に誰もいません。", ephemeral=True)
@@ -284,7 +285,7 @@ async def sokai_all(interaction: Interaction):
   new_deled_role = discord.utils.get(interaction.guild.roles, name = "委任者")
   sokai_all_message += "\n### 委任者\n"
   sokai_all_message += "、".join(i.display_name for i in new_deled_role.members)
-  await interaction.response.send_message(sokai_all_message.replace("(+0)", ""))
+  await interaction.followup.send_message(sokai_all_message.replace("(+0)", ""))
 
 
 
