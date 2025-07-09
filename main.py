@@ -117,7 +117,7 @@ async def dice(interaction: discord.Interaction, ダイス: str):
           response = response + splited[0]
       else:
           for dice in range(int(splited[0])):
-              res = np.random.randint(1, (splited[1]+1))
+              res = np.random.randint(1, (int(splited[1])+1))
               result = result + res
               response = response + str(res)
               # ダイスが1個以上の時
