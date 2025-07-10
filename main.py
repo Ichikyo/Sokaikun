@@ -31,7 +31,7 @@ async def on_ready():
 
 async def change_activity():
     activity = random.choice(
-        [":flag_bt:"])
+        ["🏴󠁧󠁢󠁳󠁣󠁴󠁿"])
     await client.change_presence(activity=discord.Game(activity))
     await asyncio.sleep(10000)
 
