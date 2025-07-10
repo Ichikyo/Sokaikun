@@ -204,6 +204,10 @@ async def sokai_1(interaction: Interaction):
 @discord.app_commands.default_permissions(administrator=True)
 async def sokai_2(interaction: Interaction):
   await interaction.response.defer(thinking=True)
+  sokai_vc = discord.utils.get(interaction.guild.voice_channels, name = "総会")
+  if sokai_vc.members == []:
+      await interaction.followup.send("エラー: ボイスチャンネル[総会]に誰もいません。", ephemeral=True)
+      return
   del_role = discord.utils.get(interaction.guild.roles, name = "委任宣言者")
   if del_role == None:
       await interaction.followup.send("エラー: ロール[委任宣言者]を見つけられませんでした。", ephemeral=True)
