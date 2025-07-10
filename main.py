@@ -150,7 +150,7 @@ async def delpanel(interaction: Interaction):
         color=discord.Color.green(),
     )
     await interaction.response.send_message(embed=warning_embed)
-    del_embed = discord.Embed(title="次回総会を委任予定の方はボタンを押してください。\n特定の人物に委任したい場合は、このボタンは押さずに一般チャンネルへその旨を記載してください。", color=discord.Color.green())
+    del_embed = discord.Embed(title="総会の委任はこちらから\n-# 特定の人物に委任したい場合は、ボタンを押さずに一般チャンネルへその旨を記載してください", color=discord.Color.green())
     del_button = discord.ui.Button(style=discord.ButtonStyle.primary, custom_id="del_id", label="委任/取消")
     view = discord.ui.View()
     view.add_item(del_button)
