@@ -431,3 +431,5 @@ TOKEN = os.getenv("DISCORD_TOKEN")
 # Web サーバの立ち上げ
 keep_alive()
 client.run(TOKEN)
+if (client.is_closed()):
+    os.system("kill 1")
