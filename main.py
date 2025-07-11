@@ -430,7 +430,6 @@ async def on_button_click(interaction: discord.Interaction):
 TOKEN = os.getenv("DISCORD_TOKEN")
 # Web サーバの立ち上げ
 keep_alive()
-try:
-    client.run(TOKEN)
-except:
+client.run(TOKEN)
+if (client.is_closed()):
     os.system("kill 1")
