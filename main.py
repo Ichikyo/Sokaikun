@@ -192,11 +192,12 @@ async def sokai_1(interaction: Interaction):
   sokai_1_message = "総会\n### 参加者\n"
   del_member = del_role.members
   pre_member = sokai_vc.members
+  pre_member_name = sorted([i.display_name for i in pre_member])
   del_number = [0]*len(pre_member)
   del_number_index = random.choices(range(len(pre_member)), k = len(del_member))
   for i in del_number_index:
       del_number[i] += 1
-  sokai_1_message += "、".join([pre_member[i].display_name + f"(+{str(del_number[i])})" for i in range(len(pre_member))])
+  sokai_1_message += "、".join([pre_member_name[i] + f"(+{str(del_number[i])})" for i in range(len(pre_member))])
   for i in pre_member:
       try:
           await i.add_roles(pre_role)
@@ -204,7 +205,6 @@ async def sokai_1(interaction: Interaction):
           await interaction.followup.send("エラー: ロールを付与できません。権限が不足している可能性があります。", ephemeral=True)
           return
   await interaction.followup.send(sokai_1_message.replace("(+0)", ""))
-
 
 
 @tree.command(name="sokai_2", description="総会Step2 委任者更新 要管理者権限")
@@ -236,8 +236,9 @@ async def sokai_2(interaction: Interaction):
           await interaction.followup.send("エラー: ロールを付与または削除できません。権限が不足している可能性があります。", ephemeral=True)
           return
   new_deled_role = discord.utils.get(interaction.guild.roles, name = "委任者")
+  new_deled_role_name = sorted([i.display_name for i in new_deled_role.members])
   sokai_2_message = "### 委任者\n"
-  sokai_2_message += "、".join(i.display_name for i in new_deled_role.members)
+  sokai_2_message += "、".join(new_deled_role_name)
   await interaction.followup.send(sokai_2_message)
 
 
@@ -276,11 +277,12 @@ async def sokai_all(interaction: Interaction):
   sokai_all_message = "総会\n### 参加者\n"
   del_member = del_role.members
   pre_member = sokai_vc.members
+  pre_member_name = sorted([i.display_name for i in pre_member])
   del_number = [0]*len(pre_member)
   del_number_index = random.choices((range(len(pre_member))), k = len(del_member))
   for i in del_number_index:
       del_number[i] += 1
-  sokai_all_message += "、".join([pre_member[i].display_name + f"(+{str(del_number[i])})" for i in range(len(pre_member))])
+  sokai_all_message += "、".join([pre_member_name[i] + f"(+{str(del_number[i])})" for i in range(len(pre_member))])
   for i in pre_member:
       try:
           await i.add_roles(pre_role)
@@ -295,10 +297,10 @@ async def sokai_all(interaction: Interaction):
           await interaction.followup.send("エラー: ロールを付与または削除できません。権限が不足している可能性があります。", ephemeral=True)
           return
   new_deled_role = discord.utils.get(interaction.guild.roles, name = "委任者")
+  new_deled_role_name = sorted([i.display_name for i in new_deled_role.members])
   sokai_all_message += "\n### 委任者\n"
-  sokai_all_message += "、".join(i.display_name for i in new_deled_role.members)
+  sokai_all_message += "、".join(new_deled_role_name)
   await interaction.followup.send(sokai_all_message.replace("(+0)", ""))
-
 
 
 # ロールパネル
