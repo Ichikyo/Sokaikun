@@ -811,6 +811,8 @@ async def death_stage2_check(interaction):
 async def death_stage2_sokaikun(interaction):
   await interaction.followup.send(f"「テーブルのコインは{savedata[interaction.user.id][5]}枚だね。」")
   if savedata[interaction.user.id][5] == 1:
+      savedata[interaction.user.id][3] += 1
+      savedata[interaction.user.id][5] = 0
       await death_stage2_result(interaction)
   elif savedata[interaction.user.id][5] % 4 == 1:
       savedata[interaction.user.id][3] += 3
