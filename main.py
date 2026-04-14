@@ -392,7 +392,7 @@ async def on_button_click(interaction):
           await interaction.response.send_message("「処理中だよ。ちょっと待ってね。」", ephemeral=True)
       elif custom_id.startswith("reset"):
           if savedata[interaction.user.id][0] == 0:
-              interaction.response.send_message("「/gameで始められるゲームで使うボタンだよ！」", ephemeral=True)
+              await interaction.response.send_message("「/gameで始められるゲームで使うボタンだよ！」", ephemeral=True)
           else:
               await death_stage1_rule(interaction)
       elif custom_id.startswith("item_1_id"):
