@@ -3,11 +3,11 @@ from discord.ext import commands
 from discord import app_commands
 from discord import Interaction
 from typing import Optional
+import datetime
 import random
 import re
 import numpy as np
 import os
-from keep_alive import keep_alive
 import asyncio
 from collections import defaultdict
 
@@ -45,6 +45,41 @@ async def change_activity():
     await asyncio.sleep(10000)
 
 
+async def kaigizyou_comment():
+  comment_list = ["スレッドを作成したよ！",
+                  "会議場へようこそ！",
+                  "テキチャ勢も参加ありがとう！",
+                  "良いアイデアの気配……！",
+                  "今日はどんな議題が挙がったのかな？",
+                  "本総会のメインチャットはこちら！",
+                  "っ🫖 🍵🍵🍵",
+                  '*"未来とは、今である。"*\n-# マーガレット・ミード']
+  weight_list = [15, 15, 15, 15, 15, 15, 5, 5]
+  comment = random.choices(comment_list, weights=weight_list)[0]
+  return comment
+
+
+async def fukuonsei_comment():
+  zodiac_list = ['おひつじ座','おうし座','ふたご座','かに座','しし座','おとめ座','てんびん座','さそり座','いて座','やぎ座','みずがめ座','うお座']
+  boardgame_list = ['パッチワーク','花火','スシゴー','こねこばくはつ','AZUL','宝石の煌き','それはオレの牧場だ！','スーパーメガラッキーボックス','ニムト','ドブル','SKULL','JUST ONE']
+  trpg_list = ['CoC','シノビガミ','ソード・ワールド','フィアスコ','怪談白物語','サタスペ','ダブルクロス','ゆうやけこやけ','パラノイア','アリアンロッド']
+  comment_list = ["ハロー、ここは総会ふくおんせいスレッド。",
+                  "アイデアをどんどん膨らませよう！",
+                  f"今日の1位は……\n## {random.choice(['おめでとう！','すご～い！','やったね♪'])}✨{random.choice(zodiac_list)}のキミ✨\nラッキーボドゲは「{random.choice(boardgame_list)}」だよ！",
+                  f"今日の12位は……\n## {random.choice(['残念！','ごめんなさ～い、','あらら。。。'])}💥{random.choice(zodiac_list)}のキミ💥\nでも大丈夫！ラッキーTRPGの「{random.choice(trpg_list)}」をやってハッピーに過ごそう！",
+                  "Hello, Fukuonsei-Thread!",
+                  "っ🫖 🍵🍵🍵",
+                  "一方そのころ、ロシアでは……",
+                  "ドーモ。チェス研民=サン。Sokaikunです。",
+                  f"しりとり、……{random.choice(['りんご！','量子コンピュータ！','リヴァイアサン！'])}",
+                  "{いい感じに盛り上がるコメントを入力}",
+                  "*雑談。つまり、くだらない話だから価値がある。有益な話なら、本屋で本を買えばいい。*\n-# 星 新一",
+                  f"@here\n# 激レア！今日はハッピーデイ🍀"]
+  weight_list = [15, 15, 17, 17, 5, 5, 5, 5, 5, 5, 5, 1]
+  comment = random.choices(comment_list, weights=weight_list)[0]
+  return comment
+
+
 # テスト用コマンド
 @tree.command(name="hello", description="Say hello to the world!") 
 async def hello(interaction: discord.Interaction): 
@@ -62,7 +97,7 @@ async def info_sokaikun(interaction: discord.Interaction):
       "それらのサイトやDiscord自体の変更によって機能停止する場合があることをご了承ください。\n"
       "サーバーでのコマンド実行が主な機能ですが、一部のコマンドはSokaikunへのDMでも実行可能です。\n"
       "## 必要なセットアップ\n"
-      "Sokaikunに管理者権限を与えてサーバーに招待したら、それぞれロール名が 参加者 , 委任者 , 委任宣言者 である3つのロールを作成し、"
+      "Sokaikunに管理者権限を与えてサーバーに招待したら、それぞれロール名が 参加者 , 委任者 , 委任宣言者 , 会議場係 , ふくおんせい係 である5つのロールを作成し、"
       "Sokaikunのロールをそれらより上位に設定してください。"
       "また、総会を行うボイスチャンネルの名前は 総会 としておいてください。\n"
       "## コマンド\n"
@@ -94,8 +129,11 @@ async def info_sokaikun(interaction: discord.Interaction):
       "**/sokai_1**および**/sokai_2**は、特定の人物への名指し委任があった場合を想定して分離されています。"
       "**/sokai_1**を実行後、名指しで委任を行った委任者に手動で委任宣言者ロールを付与し、**/sokai_2**を実行してください。"
       "名指しの委任は参加者一覧に計上できないため、各自で確認する必要があります。\n"
+      "- **/sokai_3** [管理者のみ実行可能]\n"
+      "Sokaikun自身にロール[会議場係], [ふくおんせい係]が付与されているかを確認し、付与されているロールに応じてスレッド[会議場], [ふくおんせい]を作成します。"
+      "どちらのロールも付与されていない場合は無効となります。\n"
       "- **/sokai_all** [管理者のみ実行可能]\n"
-      "**/sokai_1**と**/sokai_2**をつなげて使用できるコマンドです。"
+      "**/sokai_1**, **/sokai_2**, **/sokai_3**をつなげて使用できるコマンドです。"
       "名指しの委任が無かった場合、すなわち全員が**/del**のボタンで委任を宣言した場合にはこのコマンドを使用してください。\n"
       "## おわりに\n"
       "このBotを作るにあたって、ichikiyoはいろんなところからコードをパクってきました。"
@@ -149,18 +187,18 @@ async def dice(interaction: discord.Interaction, ダイス: str):
 @discord.app_commands.guild_only()
 @discord.app_commands.default_permissions(administrator=True)
 async def delpanel(interaction: Interaction):
-    warning_embed = discord.Embed(
-        description="委任を開始しました！",
-        color=discord.Color.green(),
-    )
-    await interaction.response.send_message(embed=warning_embed)
-    del_embed = discord.Embed(title="総会の委任はこちらから", description="特定の人物に委任したい場合は、ボタンを押さずに一般チャンネルへその旨を記載してください", color=discord.Color.green())
-    del_on_button = discord.ui.Button(style=discord.ButtonStyle.primary, custom_id="del_on_id", label="委任")
-    del_off_button = discord.ui.Button(style=discord.ButtonStyle.danger, custom_id="del_off_id", label="取消")
-    view = discord.ui.View()
-    view.add_item(del_on_button)
-    view.add_item(del_off_button)
-    await interaction.channel.send(embed=del_embed, view=view)
+  warning_embed = discord.Embed(
+      description="委任を開始しました！",
+      color=discord.Color.green(),
+  )
+  await interaction.response.send_message(embed=warning_embed)
+  del_embed = discord.Embed(title="総会の委任はこちらから", description="特定の人物に委任したい場合は、ボタンを押さずに一般チャンネルへその旨を記載してください", color=discord.Color.green())
+  del_on_button = discord.ui.Button(style=discord.ButtonStyle.primary, custom_id="del_on_id", label="委任")
+  del_off_button = discord.ui.Button(style=discord.ButtonStyle.danger, custom_id="del_off_id", label="取消")
+  view = discord.ui.View()
+  view.add_item(del_on_button)
+  view.add_item(del_off_button)
+  await interaction.channel.send(embed=del_embed, view=view)
 
 
 @tree.command(name="sokai_1", description="総会Step1 参加者更新&委任票集計 要管理者権限")
@@ -169,6 +207,9 @@ async def delpanel(interaction: Interaction):
 async def sokai_1(interaction: Interaction):
   await interaction.response.defer(thinking=True)  
   sokai_vc = discord.utils.get(interaction.guild.voice_channels, name = "総会")
+  DIFF_JST_FROM_UTC = 9
+  now = datetime.datetime.now(datetime.UTC) + datetime.timedelta(hours=DIFF_JST_FROM_UTC)
+  now_date = now.date()
   if sokai_vc.members == []:
       await interaction.followup.send("エラー: ボイスチャンネル[総会]に誰もいません。", ephemeral=True)
       return
@@ -187,7 +228,7 @@ async def sokai_1(interaction: Interaction):
   else:
       await interaction.followup.send("エラー: ロール[参加者]を見つけられませんでした。", ephemeral=True)
       return
-  sokai_1_message = "総会\n### 参加者\n"
+  sokai_1_message = f"{now_date}　総会\n### 参加者\n"
   del_member = del_role.members
   pre_member = sokai_vc.members
   pre_member_name = sorted([i.display_name for i in pre_member])
@@ -240,10 +281,39 @@ async def sokai_2(interaction: Interaction):
   await interaction.followup.send(sokai_2_message)
 
 
-@tree.command(name="sokai_all", description="総会Step1&2 要管理者権限")
+@tree.command(name="sokai_3", description="総会Step3 総会用スレッド作成 要管理者権限")
+@discord.app_commands.guild_only()
+@discord.app_commands.default_permissions(administrator=True)
+async def sokai_3(interaction: Interaction):
+  DIFF_JST_FROM_UTC = 9
+  now = datetime.datetime.now(datetime.UTC) + datetime.timedelta(hours=DIFF_JST_FROM_UTC)
+  now_date = now.date()
+  await interaction.response.defer(thinking=True)
+  sokaikun = interaction.guild.get_member(1386751629923057827)  #SokaikunのユーザーID
+  kaigizyou_role = discord.utils.get(interaction.guild.roles, name = "会議場係")
+  fukuonsei_role = discord.utils.get(interaction.guild.roles, name = "ふくおんせい係")
+  if not discord.utils.get(sokaikun.roles, id=int(kaigizyou_role.id)) and not discord.utils.get(sokaikun.roles, id=int(fukuonsei_role.id)):
+      await interaction.followup.send("ボクはロール[会議場係], [ふくおんせい係]のどちらも持ってないよ！", ephemeral=True)
+      return
+  sokai_3_message = "テキストチャット用スレッドはこちら\n"
+  if discord.utils.get(sokaikun.roles, id=int(kaigizyou_role.id)):
+      kaigizyou_thread = await interaction.channel.create_thread(name=f"{now_date} 会議場", type=discord.ChannelType.public_thread)
+      await kaigizyou_thread.send(await kaigizyou_comment())
+      sokai_3_message += f"{kaigizyou_thread.jump_url}　"
+  if discord.utils.get(sokaikun.roles, id=int(fukuonsei_role.id)):
+      fukuonsei_thread = await interaction.channel.create_thread(name=f"{now_date} ふくおんせい", type=discord.ChannelType.public_thread)
+      await fukuonsei_thread.send(await fukuonsei_comment())
+      sokai_3_message += fukuonsei_thread.jump_url
+  await interaction.followup.send(sokai_3_message)
+
+
+@tree.command(name="sokai_all", description="総会Step1～3 要管理者権限")
 @discord.app_commands.guild_only()
 @discord.app_commands.default_permissions(administrator=True)
 async def sokai_all(interaction: Interaction):
+  DIFF_JST_FROM_UTC = 9
+  now = datetime.datetime.now(datetime.UTC) + datetime.timedelta(hours=DIFF_JST_FROM_UTC)
+  now_date = now.date()
   await interaction.response.defer(thinking=True)
   sokai_vc = discord.utils.get(interaction.guild.voice_channels, name = "総会")
   if sokai_vc.members == []:
@@ -272,7 +342,7 @@ async def sokai_all(interaction: Interaction):
           except discord.Forbidden:
               await interaction.followup.send("エラー: ロールを削除できません。権限が不足している可能性があります。", ephemeral=True)
               return
-  sokai_all_message = "総会\n### 参加者\n"
+  sokai_all_message = f"{now_date}　総会\n### 参加者\n"
   del_member = del_role.members
   pre_member = sokai_vc.members
   pre_member_name = sorted([i.display_name for i in pre_member])
@@ -298,6 +368,21 @@ async def sokai_all(interaction: Interaction):
   new_deled_role_name = sorted([i.display_name for i in new_deled_role.members])
   sokai_all_message += "\n### 委任者\n"
   sokai_all_message += "、".join(new_deled_role_name)
+  sokaikun = interaction.guild.get_member(1386751629923057827)  #SokaikunのユーザーID
+  kaigizyou_role = discord.utils.get(interaction.guild.roles, name = "会議場係")
+  fukuonsei_role = discord.utils.get(interaction.guild.roles, name = "ふくおんせい係")
+  if not discord.utils.get(sokaikun.roles, id=int(kaigizyou_role.id)) and not discord.utils.get(sokaikun.roles, id=int(fukuonsei_role.id)):
+      await interaction.followup.send(sokai_all_message.replace("(+0)", ""))
+      return
+  sokai_all_message += "\n\nテキストチャット用スレッドはこちら\n"
+  if discord.utils.get(sokaikun.roles, id=int(kaigizyou_role.id)):
+      kaigizyou_thread = await interaction.channel.create_thread(name=f"{now_date} 会議場", type=discord.ChannelType.public_thread)
+      await kaigizyou_thread.send(await kaigizyou_comment())
+      sokai_all_message += f"{kaigizyou_thread.jump_url}　"
+  if discord.utils.get(sokaikun.roles, id=int(fukuonsei_role.id)):
+      fukuonsei_thread = await interaction.channel.create_thread(name=f"{now_date} ふくおんせい", type=discord.ChannelType.public_thread)
+      await fukuonsei_thread.send(await fukuonsei_comment())
+      sokai_all_message += fukuonsei_thread.jump_url
   await interaction.followup.send(sokai_all_message.replace("(+0)", ""))
 
 
