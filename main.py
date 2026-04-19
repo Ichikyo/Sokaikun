@@ -53,7 +53,7 @@ async def kaigizyou_comment():
                   "良いアイデアの気配……！",
                   "今日はどんな議題が挙がったのかな？",
                   "本総会のメインチャットはこちら！",
-                  "っ🫖 🍵🍵🍵",
+                  "# っ🫖 🍵🍵🍵",
                   '*"未来とは、今である。"*\n-# マーガレット・ミード']
   weight_list = [15, 15, 15, 15, 15, 15, 5, 5]
   comment = random.choices(comment_list, weights=weight_list)[0]
@@ -69,7 +69,7 @@ async def fukuonsei_comment():
                   f"今日の1位は……\n## {random.choice(['おめでとう！','すご～い！','やったね♪'])}✨{random.choice(zodiac_list)}のキミ✨\nラッキーボドゲは「{random.choice(boardgame_list)}」だよ！",
                   f"今日の12位は……\n## {random.choice(['残念！','ごめんなさ～い、','あらら。。。'])}💥{random.choice(zodiac_list)}のキミ💥\nでも大丈夫！ラッキーTRPGの「{random.choice(trpg_list)}」をやってハッピーに過ごそう！",
                   "Hello, Fukuonsei-Thread!",
-                  "っ🫖 🍵🍵🍵",
+                  "# っ🫖 🍵🍵🍵",
                   "一方そのころ、ロシアでは……",
                   "ドーモ。チェス研民=サン。Sokaikunです。",
                   f"しりとり、……{random.choice(['りんご！','量子コンピュータ！','リヴァイアサン！'])}",
