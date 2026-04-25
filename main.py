@@ -1402,4 +1402,4 @@ async def shop(interaction: discord.Interaction):
 TOKEN = os.getenv("DISCORD_TOKEN")
 # Web サーバの立ち上げ
 keep_alive()
-client.run(TOKEN)
+bot.run(TOKEN)
