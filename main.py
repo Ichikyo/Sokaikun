@@ -572,12 +572,12 @@ class yattare_View(discord.ui.View):
             await thread.send("「ようこそ！ここがキミとのゲームスペースさ！」")
             await asyncio.sleep(3)
             await thread.send(f"「そしてこれが…ゲームにつかう{interaction.user.name}コイン！」")
-            await thread.send(file=discord.File(R"illust\kiminocoin.png"))
+            await thread.send(file=discord.File(R"illust/kiminocoin.png"))
             await asyncio.sleep(3)
             await thread.send("「当然キミとのゲームに使うためだけに製造したものだよ！」")
             await asyncio.sleep(3)
             await thread.send("「全部で65535枚あるからじゃんじゃん使えるね！」")
-            await thread.send(file=discord.File(R"illust\yamamori.png"))
+            await thread.send(file=discord.File(R"illust/yamamori.png"))
             await asyncio.sleep(3)
             await thread.send("「ゲームの参加賞として、はい！1枚あげる！」")
             await asyncio.sleep(3)
@@ -696,7 +696,7 @@ class death_1_View(discord.ui.View):
             await interaction.channel.send("「それじゃあテーブルに1枚だけコインを置くよ。/coinで確認できるからね！」")
             data.sokaikun_coin = 65533
             data.table_coin = 1
-            await interaction.channel.send(file=discord.File(R"illust\hajimeruka.png"))
+            await interaction.channel.send(file=discord.File(R"illust/hajimeruka.png"))
             await asyncio.sleep(3)
             await interaction.channel.send("「さっそく、ステージ1を始めよっか？」")
             await asyncio.sleep(3)
@@ -913,7 +913,7 @@ class death_8_View(discord.ui.View, ResetButtonMixin):
                 await interaction.channel.send("「キミと遊べて楽しかったよ！付き合ってくれてありがとう！」")
                 if data.clear == 1:
                     data.clear = 2
-                    await interaction.channel.send(file=discord.File(R"illust\arigatou.png"))
+                    await interaction.channel.send(file=discord.File(R"illust/arigatou.png"))
                     await asyncio.sleep(3)
                     await interaction.channel.send("# ゲームクリアです。\n今後ともSokaikunをよろしくお願いします。")
                     await asyncio.sleep(3)
@@ -1315,12 +1315,12 @@ async def death_stage2_result(interaction):
         await interaction.channel.send("「借りたものを返すなんて、わざわざルールに書くまでもないよね。」")
         await asyncio.sleep(0.3)
         await interaction.channel.send("## 「だって当たり前のことだもんね！」")
-        await interaction.channel.send(file=discord.File(R"illust\dekaibokudayo.png"))
+        await interaction.channel.send(file=discord.File(R"illust/dekaibokudayo.png"))
     await asyncio.sleep(0.3)
     await interaction.channel.send(f"「それじゃあ、ステージ1でキミに貸した{data.borrow_coin}枚の{interaction.user.name}コイン、」")
     await asyncio.sleep(0.3)
     await interaction.channel.send("「耳をそろえて返してよ！」")
-    await interaction.channel.send(file=discord.File(R"illust\misebirakashi.png"))
+    await interaction.channel.send(file=discord.File(R"illust/misebirakashi.png"))
     await asyncio.sleep(0.3)
     death_stage3_return_embed = discord.Embed(title="返してくれる？", color=discord.Color.blue())
     data.step = 8
