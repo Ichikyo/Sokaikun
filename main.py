@@ -404,12 +404,12 @@ async def sokai_3(interaction: discord.Interaction):
         sokai_3_message = "テキストチャット用スレッドはこちら\n"
         if venue_role in sokaikun.roles:
             venue_thread = await interaction.channel.create_thread(name=f"{now_date} 会議場", type=discord.ChannelType.public_thread)
-        await venue_thread.send(await venue_comment())
-        sokai_3_message += f"{venue_thread.jump_url}　"
-    if hangout_role in sokaikun.roles:
-        hangout_thread = await interaction.channel.create_thread(name=f"{now_date} ふくおんせい", type=discord.ChannelType.public_thread)
-        await hangout_thread.send(await hangout_comment())
-        sokai_3_message += hangout_thread.jump_url
+            await venue_thread.send(await venue_comment())
+            sokai_3_message += f"{venue_thread.jump_url}　"
+        if hangout_role in sokaikun.roles:
+            hangout_thread = await interaction.channel.create_thread(name=f"{now_date} ふくおんせい", type=discord.ChannelType.public_thread)
+            await hangout_thread.send(await hangout_comment())
+            sokai_3_message += hangout_thread.jump_url
     else:
         await interaction.followup.send(f"ボクはロール[{ROLE_VENUE_STAFF}], [{ROLE_HANGOUT_STAFF}]のどちらも持ってないよ！")
         return
