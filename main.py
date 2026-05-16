@@ -22,7 +22,7 @@ ROLE_DELEGATOR = "委任宣言者"
 ROLE_VENUE_STAFF = "会議場係"
 ROLE_HANGOUT_STAFF = "ふくおんせい係"
 VC_SOKAI_NAME = "総会"
-SOKAIKUN_ID = 1386751629923057827  # SokaikunのユーザーID
+SOKAIKUN_ID = 1387398686165962792  # SokaikunのユーザーID
 
 
 # ==========================================
